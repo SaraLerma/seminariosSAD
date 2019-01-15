@@ -1,0 +1,14 @@
+{
+  "name": "carrito",
+  "version": "1.0.0",
+  "description": "carrito de la compra",
+  "scripts": {
+    "test": "node Cliente_mongo.js"
+  },
+  "author": "Sandra, Sara, Celia, Carlos",
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "2.2.33",
+    "q": "^1.5.1"
+  }
+}

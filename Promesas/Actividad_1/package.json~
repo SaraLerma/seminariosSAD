@@ -1,0 +1,10 @@
+{
+  "name": "act1-promesas",
+  "version": "1.0.0",
+  "description": "actividad_1 de promesas",
+  "scripts": {
+    "test": "node act1_promesas.js"
+  },
+  "author": "Sandra, Sara, Celia, Carlos",
+  "license": "ISC"
+}

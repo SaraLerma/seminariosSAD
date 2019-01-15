@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Chat</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+	  div.abajo {
+			color: #FFFFFF;
+			padding-top: 2px;
+			padding-right: 2px;
+			padding-bottom: 2px;
+			padding-left: 4px;
+		}
+    </style>
+  </head>
+  <body>
+    <ul id="messages">
+	<li>Para cambiar el usuario escribes la sentencia: /usuario "nuevousuario"</li>
+	<li>Para saber las personas conectadas escribes la sentencia: /conectados</li>
+	<hr>
+	</ul>
+    <form action="">
+		<div id="msjEsc" class="abajo" ></div>
+		<input id="m" autocomplete="off" /><button>Enviar</button>
+    </form>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+      var socket = io();
+      $('form').submit(function(){
+      	$('#messages').append($('<li>').text($('#m').val()));
+        socket.emit('chat message', $('#m').val());
+        $('#m').val('');
+        return false;
+      });
+      socket.on('chat message', function(msg){
+        $('#messages').append($('<li>').text(msg));
+      });
+	  socket.on('writing', function(msg) {
+		if (msg){
+			document.getElementById("msjEsc").innerHTML = "escribiendo...";
+		}
+		else{
+			document.getElementById("msjEsc").innerHTML = "";
+		}
+	  });
+	  socket.on('conectados', function(lista) {
+		$('#messages').append($('<li>').text("Usuarios conectados:"));
+		var anonimos = 0;
+		for (usuario of lista) {
+			if (usuario != null)
+				$('#messages').append($('<li>').text("\t-\t" + usuario));
+			
+			else anonimos = anonimos + 1;
+		}
+		if (anonimos != 0) $('#messages').append($('<li>').text("\t-\t Anónimos (" + anonimos + ")"));
+	  });
+	  setInterval(function() {if ($('#m').val() != "") socket.emit('writing', "");}, 1000);
+    </script>
+  </body>
+</html>
